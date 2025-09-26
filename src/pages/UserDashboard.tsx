@@ -9,8 +9,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
-import { RefreshCw, Search, Filter, Moon, CheckCircle, AlertTriangle, Info, Zap } from 'lucide-react';
+import { RefreshCw, Search, Filter, Moon, CheckCircle, AlertTriangle, Info, Zap, LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { getCurrentUser, logout } from '@/lib/auth';
+import { useNavigate } from 'react-router-dom';
 
 interface UserDashboardProps {
   onUnreadCountChange: (count: number) => void;
@@ -25,6 +27,8 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({ onUnreadCountChang
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [reminderPulses, setReminderPulses] = useState<Set<string>>(new Set());
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const currentUser = getCurrentUser();
 
   const loadAlerts = async () => {
     try {
@@ -191,8 +195,29 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({ onUnreadCountChang
     );
   }
 
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
   return (
-    <div className="space-y-6">
+    <div className="min-h-screen bg-background">
+      <div className="border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold">User Dashboard</h1>
+              <p className="text-sm text-muted-foreground">Welcome, {currentUser?.name}</p>
+            </div>
+            <Button variant="outline" onClick={handleLogout} className="flex items-center gap-2">
+              <LogOut className="h-4 w-4" />
+              Logout
+            </Button>
+          </div>
+        </div>
+      </div>
+      
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <motion.div
@@ -371,6 +396,7 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({ onUnreadCountChang
           )}
         </div>
       </AnimatePresence>
+      </main>
     </div>
   );
 };

@@ -24,10 +24,13 @@ import {
   Info,
   Zap,
   Play,
-  Settings
+  Settings,
+  LogOut
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { format, formatDistanceToNow, isAfter, isBefore } from 'date-fns';
+import { getCurrentUser, logout } from '@/lib/auth';
+import { useNavigate } from 'react-router-dom';
 
 export const AdminDashboard: React.FC = () => {
   const [alerts, setAlerts] = useState<Alert[]>([]);
@@ -38,6 +41,8 @@ export const AdminDashboard: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [triggeringReminders, setTriggeringReminders] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const currentUser = getCurrentUser();
 
   const loadAlerts = async () => {
     try {
@@ -166,8 +171,32 @@ export const AdminDashboard: React.FC = () => {
     );
   }
 
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
   return (
-    <div className="space-y-6">
+    <div className="min-h-screen bg-background">
+      <div className="border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold">Admin Dashboard</h1>
+              <p className="text-sm text-muted-foreground">Welcome, {currentUser?.name}</p>
+            </div>
+            <div className="flex items-center gap-3">
+              <CreateAlertDialog onAlertCreated={loadAlerts} />
+              <Button variant="outline" onClick={handleLogout} className="flex items-center gap-2">
+                <LogOut className="h-4 w-4" />
+                Logout
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <motion.div
@@ -271,7 +300,6 @@ export const AdminDashboard: React.FC = () => {
                 <RefreshCw className={cn("w-4 h-4", refreshing && "animate-spin")} />
                 Refresh
               </Button>
-              <CreateAlertDialog onAlertCreated={loadAlerts} />
             </div>
           </div>
         </CardHeader>
@@ -414,6 +442,7 @@ export const AdminDashboard: React.FC = () => {
           </div>
         </CardContent>
       </Card>
+      </main>
     </div>
   );
 };
