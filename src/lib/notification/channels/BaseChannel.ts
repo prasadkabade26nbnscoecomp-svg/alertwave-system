@@ -33,3 +33,5 @@ export interface DeliveryResult {
   timestamp: string;
   error?: string;
 }
+
+export { BaseNotificationChannel }

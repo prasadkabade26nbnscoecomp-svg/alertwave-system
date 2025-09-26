@@ -10,23 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { 
-  RefreshCw, 
-  Search, 
-  Filter, 
-  Archive, 
-  Edit, 
-  Users, 
-  User, 
-  Building, 
-  Clock,
-  AlertTriangle,
-  Info,
-  Zap,
-  Play,
-  Settings,
-  LogOut
-} from 'lucide-react';
+import { RefreshCw, Search, Filter, Archive, CreditCard as Edit, Users, User, Building, Clock, TriangleAlert as AlertTriangle, Info, Zap, Play, Settings, LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { format, formatDistanceToNow, isAfter, isBefore } from 'date-fns';
 import { getCurrentUser, logout } from '@/lib/auth';

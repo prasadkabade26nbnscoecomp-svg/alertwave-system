@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { SimpleBarChart, SimplePieChart } from '@/components/ui/simple-chart';
 import { AnalyticsData } from '@/lib/types';
 import { mockApi } from '@/lib/mock-api';
-import { AlertTriangle, CheckCircle, Moon, TrendingUp, Activity, Users } from 'lucide-react';
+import { TriangleAlert as AlertTriangle, CircleCheck as CheckCircle, Moon, TrendingUp, Activity, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const StatCard: React.FC<{
