@@ -96,7 +96,7 @@ export const AdminDashboard: React.FC = () => {
       const result = await mockApi.triggerReminders();
       toast({
         title: "Reminders Triggered",
-        description: `${result.triggered} reminders have been sent.`,
+        description: `${result.triggered} reminders have been sent using the enhanced notification system.`,
       });
     } catch (error) {
       toast({

@@ -50,7 +50,7 @@ export const AnalyticsDashboard: React.FC = () => {
   useEffect(() => {
     const loadAnalytics = async () => {
       try {
-        const data = await mockApi.getAnalytics();
+        const data = await mockApi.getDetailedAnalytics();
         setAnalytics(data);
       } catch (error) {
         console.error('Failed to load analytics:', error);
@@ -140,10 +140,10 @@ export const AnalyticsDashboard: React.FC = () => {
         
         <StatCard
           title="Total Snoozes"
-          value={totalSnoozes}
+          value={analytics.userEngagementMetrics?.totalActiveUsers || totalSnoozes}
           icon={Moon}
           gradient="bg-gradient-warning"
-          description="Across all alerts"
+          description="Active users"
         />
       </div>
 
@@ -185,6 +185,58 @@ export const AnalyticsDashboard: React.FC = () => {
           </Card>
         </motion.div>
       </div>
+
+      {/* Enhanced Analytics */}
+      {analytics.alertEffectiveness && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.5 }}
+        >
+          <Card>
+            <CardHeader>
+              <CardTitle>Alert Effectiveness</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h4 className="font-medium text-sm text-muted-foreground mb-3">Most Effective Alerts</h4>
+                  <div className="space-y-2">
+                    {analytics.alertEffectiveness.mostEffective.slice(0, 3).map((alert, index) => (
+                      <div key={alert.alertId} className="flex justify-between items-center p-2 bg-muted/50 rounded">
+                        <span className="text-sm truncate">{alert.title}</span>
+                        <Badge variant="outline">{alert.readRate.toFixed(1)}%</Badge>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                <div>
+                  <h4 className="font-medium text-sm text-muted-foreground mb-3">Performance Metrics</h4>
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-sm">Average Read Rate</span>
+                      <span className="font-medium">{analytics.alertEffectiveness.averageReadRate.toFixed(1)}%</span>
+                    </div>
+                    {analytics.responseTimeMetrics && (
+                      <>
+                        <div className="flex justify-between">
+                          <span className="text-sm">Avg Response Time</span>
+                          <span className="font-medium">{analytics.responseTimeMetrics.average}m</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-sm">Fastest Response</span>
+                          <span className="font-medium">{analytics.responseTimeMetrics.fastest}m</span>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+      )}
 
       {/* Detailed Metrics */}
       <motion.div
@@ -256,6 +308,12 @@ export const AnalyticsDashboard: React.FC = () => {
                       }
                     </span>
                   </div>
+                  {analytics.userEngagementMetrics && (
+                    <div className="flex justify-between">
+                      <span className="text-sm">Engagement Rate</span>
+                      <span className="font-medium">{analytics.userEngagementMetrics.averageEngagementRate.toFixed(1)}%</span>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
